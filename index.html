@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>EPL STRONG SOUL · Dashboard</title>
+  <meta name="description" content="EPL STRONG SOUL · Club de baloncesto en Serranías." />
+  <meta name="theme-color" content="#00b86b" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #ffffff;
+      background: #0d1f17;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #0d1f17; }
+    ::-webkit-scrollbar-thumb { background: #00c06a; border-radius: 999px; }
+
+    :root {
+      --green: #00c06a;
+      --radius: 14px;
+      --transition: 0.25s ease;
+      --bg-card: rgba(255,255,255,0.04);
+      --border-card: rgba(255,255,255,0.07);
+    }
+
+    /* ===== SIDEBAR — SOLO ICONOS Y TEXTO ===== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 210px;
+      background: transparent;
+      padding: 32px 10px 16px;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: #00c06a; border-radius: 999px; }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 6px 20px;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      margin-bottom: 12px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #00c06a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: #0d1f17;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.3px;
+      color: #ffffff;
+    }
+    .brand-text span { color: #00c06a; }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      padding: 0 2px 16px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border: none;
+      background: transparent;
+      width: 100%;
+      color: #9ab0a5;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 0.85rem;
+      text-align: left;
+      border-radius: 6px;
+    }
+
+    .nav-item i {
+      font-size: 1rem;
+      min-width: 22px;
+      color: #6a8a7a;
+      transition: color 0.2s ease;
+    }
+
+    .nav-item .nav-text {
+      color: #9ab0a5;
+      font-weight: 400;
+      transition: color 0.2s ease;
+    }
+
+    .nav-item .nav-badge {
+      margin-left: auto;
+      background: #00c06a;
+      padding: 0 7px;
+      border-radius: 999px;
+      font-size: 0.45rem;
+      font-weight: 700;
+      color: #0d1f17;
+      letter-spacing: 0.2px;
+      flex-shrink: 0;
+    }
+
+    .nav-item:hover {
+      color: #ffffff;
+    }
+    .nav-item:hover i { color: #00e07a; }
+    .nav-item:hover .nav-text { color: #ffffff; }
+
+    .nav-item.active {
+      color: #ffffff;
+    }
+    .nav-item.active i { color: #00e07a; }
+    .nav-item.active .nav-text { color: #ffffff; }
+    .nav-item.active .nav-badge { background: #00e07a; }
+
+    .sidebar-footer {
+      padding: 12px 6px 0;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.55rem;
+      color: #4a6a5a;
+      text-align: center;
+      flex-shrink: 0;
+      letter-spacing: 0.3px;
+    }
+
+    /* ===== TOGGLE MÓVIL ===== */
+    .sidebar-toggle {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 1001;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      width: 38px;
+      height: 38px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .sidebar-toggle:hover { color: #00c06a; }
+
+    /* ===== CONTENIDO PRINCIPAL ===== */
+    .main-content {
+      margin-left: 210px;
+      flex: 1;
+      min-height: 100vh;
+      padding: 36px 44px 90px;
+      transition: margin-left 0.3s ease;
+    }
+    .main-content.hidden { display: none; }
+
+    .dashboard-section { display: none; animation: sectionFade 0.4s ease; }
+    .dashboard-section.active { display: block; }
+
+    @keyframes sectionFade {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      margin-bottom: 30px;
+    }
+    .section-header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+    }
+    .section-header h1 .highlight { color: #00c06a; }
+    .section-header p {
+      color: #8aaa9a;
+      font-weight: 300;
+      margin-top: 4px;
+      font-size: 0.95rem;
+    }
+
+    /* ===== CARDS ===== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 22px;
+      margin-top: 14px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+      transition: var(--transition);
+    }
+    .card:hover {
+      border-color: rgba(0,192,106,0.2);
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.06);
+    }
+    .card .card-icon {
+      font-size: 2.2rem;
+      color: #00c06a;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 5px;
+    }
+    .card p {
+      color: #b0c8b8;
+      font-weight: 300;
+      line-height: 1.7;
+      font-size: 0.9rem;
+    }
+    .card .card-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .card .card-tags .tag {
+      background: rgba(0,192,106,0.08);
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      color: #00c06a;
+      border: 1px solid rgba(0,192,106,0.06);
+    }
+
+    /* ===== UBICACIÓN ===== */
+    .location-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 14px;
+    }
+    .location-info {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+    }
+    .location-info h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    .location-info .address p {
+      color: #b0c8b8;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+    .location-info .address i {
+      color: #00c06a;
+      width: 22px;
+    }
+    .location-info .contact-details {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .location-info .contact-details p {
+      color: #b0c8b8;
+      font-size: 0.85rem;
+      margin-bottom: 3px;
+    }
+    .location-map {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      min-height: 260px;
+    }
+    .location-map iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      border: none;
+      display: block;
+    }
+
+    /* ===== GALERÍA ===== */
+    .gallery-grid-dash {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .gallery-grid-dash .gallery-item {
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 1/1;
+      border: 1px solid var(--border-card);
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      background: #0f221a;
+    }
+    .gallery-grid-dash .gallery-item:hover {
+      transform: scale(1.03);
+      border-color: #00c06a;
+    }
+    .gallery-grid-dash .gallery-item img,
+    .gallery-grid-dash .gallery-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-grid-dash .gallery-item .play-badge {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: 0.25s;
+    }
+    .gallery-grid-dash .gallery-item:hover .play-badge { opacity: 1; }
+    .gallery-grid-dash .gallery-item .play-badge i {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #00c06a;
+      color: #0d1f17;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    /* ===== MODAL PARA GALERÍA ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      backdrop-filter: blur(8px);
+      animation: modalFade 0.3s ease;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    @keyframes modalFade {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-overlay .modal-content {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      position: relative;
+      background: #0d1f17;
+    }
+    .modal-overlay .modal-content img,
+    .modal-overlay .modal-content video {
+      display: block;
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+    .modal-overlay .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.2);
+      color: #ffffff;
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+      z-index: 10;
+      font-weight: 300;
+    }
+    .modal-overlay .modal-close:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.08);
+      border-color: #00c06a;
+    }
+    .modal-overlay .modal-close i {
+      font-size: 1.4rem;
+    }
+
+    /* ===== PRECIOS — UNA SOLA CARTA CON IMAGEN ===== */
+    .pricing-single {
+      max-width: 500px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .pricing-single:hover {
+      border-color: rgba(0,192,106,0.2);
+      transform: translateY(-3px);
+    }
+    .pricing-single .pricing-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      background: #0f221a;
+    }
+    .pricing-single .pricing-body {
+      padding: 28px 24px 24px;
+      text-align: center;
+    }
+    .pricing-single .pricing-body h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .pricing-single .pricing-body .price {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #00c06a;
+      margin: 8px 0 12px;
+    }
+    .pricing-single .pricing-body .price small {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: #6a8a7a;
+    }
+    .pricing-single .pricing-body p {
+      color: #b0c8b8;
+      font-weight: 300;
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+    .pricing-single .pricing-body .btn-contact {
+      background: #00c06a;
+      border: none;
+      color: #0d1f17;
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: var(--transition);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      width: 100%;
+    }
+    .pricing-single .pricing-body .btn-contact:hover {
+      background: #00e07a;
+      transform: translateY(-2px);
+    }
+
+    /* ===== CONTACTO ===== */
+    .contact-dash {
+      max-width: 540px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+    }
+    .contact-dash .form-title {
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .contact-dash .form-sub {
+      text-align: center;
+      color: #6a8a7a;
+      font-weight: 300;
+      margin-bottom: 18px;
+      font-size: 0.85rem;
+    }
+    .contact-dash .form-group {
+      margin-bottom: 12px;
+    }
+    .contact-dash .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: #8aaa9a;
+    }
+    .contact-dash .form-group input,
+    .contact-dash .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      outline: none;
+    }
+    .contact-dash .form-group input:focus,
+    .contact-dash .form-group textarea:focus {
+      border-color: #00c06a;
+      background: rgba(255,255,255,0.06);
+    }
+    .contact-dash .form-group textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+    .contact-dash .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: #00c06a;
+      color: #0d1f17;
+      border: none;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Inter', sans-serif;
+    }
+    .contact-dash .submit-btn:hover {
+      background: #00e07a;
+      transform: translateY(-2px);
+    }
+    .contact-dash .whatsapp-info {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.7rem;
+      color: #4a6a5a;
+    }
+
+    /* ===== SPLASH ===== */
+    .mobile-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #0d1f17;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .mobile-splash.active {
+      display: flex;
+      opacity: 1;
+      pointer-events: all;
+    }
+    .mobile-splash .splash-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #00c06a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      color: #0d1f17;
+    }
+    .mobile-splash .splash-text {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #ffffff;
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    .mobile-splash .splash-sub {
+      font-size: 0.9rem;
+      color: #6a8a7a;
+      font-weight: 300;
+      letter-spacing: 2px;
+      opacity: 0;
+      transform: translateX(30px);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1200px) {
+      .location-container { grid-template-columns: 1fr; }
+      .location-map iframe { min-height: 200px; }
+    }
+    @media (max-width: 992px) {
+      .main-content { padding: 28px 24px 80px; }
+      .section-header h1 { font-size: 1.7rem; }
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 190px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        background: #0d1f17;
+      }
+      .sidebar.mobile-open { transform: translateX(0); }
+      .sidebar-toggle { display: flex; }
+      .main-content {
+        margin-left: 0 !important;
+        padding: 72px 14px 70px;
+      }
+      .gallery-grid-dash { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+      .section-header h1 { font-size: 1.5rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .contact-dash { padding: 22px 18px; }
+      .location-info { padding: 18px 14px; }
+      .location-map iframe { min-height: 160px; }
+      .modal-overlay { padding: 20px; }
+      .modal-overlay .modal-close {
+        width: 44px;
+        height: 44px;
+        font-size: 1.4rem;
+        top: 12px;
+        right: 14px;
+      }
+      .pricing-single .pricing-image {
+        height: 170px;
+      }
+      .pricing-single .pricing-body {
+        padding: 20px 18px 18px;
+      }
+      .pricing-single .pricing-body .price {
+        font-size: 2rem;
+      }
+    }
+    @media (max-width: 400px) {
+      .gallery-grid-dash { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
+      .section-header h1 { font-size: 1.2rem; }
+      .card { padding: 18px 14px; }
+      .main-content { padding: 68px 10px 60px; }
+      .contact-dash { padding: 18px 14px; }
+      .sidebar { width: 170px; }
+      .pricing-single .pricing-image {
+        height: 140px;
+      }
+    }
+    @media (min-width: 769px) {
+      .sidebar-toggle { display: none !important; }
+      .sidebar { transform: translateX(0) !important; background: transparent; }
+    }
+
+    .gsap-fade {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    /* ===== MEJORAS VISUALES ===== */
+    .card .card-icon {
+      transition: transform 0.3s ease;
+    }
+    .card:hover .card-icon {
+      transform: scale(1.1);
+    }
+
+    .pricing-single .pricing-image {
+      transition: transform 0.4s ease;
+    }
+    .pricing-single:hover .pricing-image {
+      transform: scale(1.02);
+    }
+
+    .location-info .contact-details p i {
+      color: #00c06a;
+      width: 22px;
+    }
+
+    .modal-overlay .modal-close {
+      transition: all 0.3s ease;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 20px;
+      background: #00c06a;
+      border-radius: 4px;
+    }
+
+    .contact-dash .form-group input,
+    .contact-dash .form-group textarea {
+      transition: all 0.3s ease;
+    }
+    .contact-dash .form-group input:focus,
+    .contact-dash .form-group textarea:focus {
+      border-color: #00c06a;
+      box-shadow: 0 0 0 3px rgba(0,192,106,0.1);
+    }
+
+    .btn-contact, .submit-btn {
+      transition: all 0.3s ease;
+    }
+    .btn-contact:hover, .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,192,106,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SPLASH MÓVIL -->
+  <div class="mobile-splash" id="mobileSplash">
+    <div class="splash-logo" id="splashLogo"><i class="fas fa-basketball-ball"></i></div>
+    <div class="splash-text" id="splashText">EPL STRONG SOUL</div>
+    <div class="splash-sub" id="splashSub">🏀 Bienvenido al club</div>
+  </div>
+
+  <!-- SIDEBAR — SOLO ICONOS Y TEXTO -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo"><i class="fas fa-basketball-ball"></i></div>
+      <div class="brand-text">EPL <span>STRONG</span> SOUL</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-section="inicio">
+        <i class="fas fa-home"></i>
+        <span class="nav-text">Inicio</span>
+      </button>
+      <button class="nav-item" data-section="club">
+        <i class="fas fa-shield-alt"></i>
+        <span class="nav-text">El Club</span>
+      </button>
+      <button class="nav-item" data-section="ubicacion">
+        <i class="fas fa-map-pin"></i>
+        <span class="nav-text">Ubicación</span>
+        <span class="nav-badge">Ver</span>
+      </button>
+      <button class="nav-item" data-section="social">
+        <i class="fas fa-share-alt"></i>
+        <span class="nav-text">Redes</span>
+      </button>
+      <button class="nav-item" data-section="galeria">
+        <i class="fas fa-images"></i>
+        <span class="nav-text">Galería</span>
+        <span class="nav-badge">+10</span>
+      </button>
+      <button class="nav-item" data-section="precios">
+        <i class="fas fa-tag"></i>
+        <span class="nav-text">Planes</span>
+      </button>
+      <button class="nav-item" data-section="contacto">
+        <i class="fab fa-whatsapp"></i>
+        <span class="nav-text">Contacto</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span>© 2026 · EPL STRONG SOUL</span>
+    </div>
+  </aside>
+
+  <!-- TOGGLE MÓVIL -->
+  <button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- MODAL PARA GALERÍA -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content" id="modalContent">
+      <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main-content hidden" id="mainContent">
+
+    <!-- INICIO -->
+    <section class="dashboard-section active" id="section-inicio">
+      <div class="section-header">
+        <h1>🏀 Bienvenido a <span class="highlight">EPL STRONG SOUL</span></h1>
+        <p>Dashboard del club · Serranías, Colombia</p>
+      </div>
+      <div class="card-grid">
+        <div class="card gsap-fade">
+          <div class="card-icon"><i class="fas fa-trophy"></i></div>
+          <h3>Disciplina</h3>
+          <p>En el club, creamos disciplina en los niños para mejorar su concentración en los ejercicios y alcanzar el más alto nivel mental.</p>
+        </div>
+        <div class="card gsap-fade">
+          <div class="card-icon"><i class="fas fa-users"></i></div>
+          <h3>2 Categorías</h3>
+          <p>Desde los más pequeños hasta los juveniles, todos pueden reforzar sus conocimientos a alto nivel en el baloncesto.</p>
+          <div class="card-tags"><span class="tag">👶 Infantil</span><span class="tag">🧑 Juvenil</span></div>
+        </div>
+        <div class="card gsap-fade">
+          <div class="card-icon"><i class="fas fa-calendar-alt"></i></div>
+          <h3>Años de experiencia</h3>
+          <p>Una trayectoria que nos respalda. Un entrenador con la mentalidad de ayudar a los niños a aprender y ser mejores cada día.</p>
+          <div class="card-tags"><span class="tag">🏀 Coach Eddi</span></div>
+        </div>
+      </div>
+      <div style="margin-top: 28px; padding: 22px; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border-card); text-align: center;">
+        <p style="color: #8aaa9a; font-weight: 300; font-size: 0.95rem;">
+          <i class="fas fa-quote-left" style="color: #00c06a; margin-right: 8px;"></i>
+          "El baloncesto no es solo un deporte, es una forma de vida que nos une como familia."
+          <i class="fas fa-quote-right" style="color: #00c06a; margin-left: 8px;"></i>
+        </p>
+      </div>
+    </section>
+
+    <!-- CLUB -->
+    <section class="dashboard-section" id="section-club">
+      <div class="section-header">
+        <h1><i class="fas fa-shield-alt" style="color:#00c06a; font-size:1.6rem;"></i> El Club</h1>
+        <p>Conoce nuestra historia, misión y valores</p>
+      </div>
+      <div class="card-grid">
+        <div class="card gsap-fade" style="grid-column: 1 / -1;">
+          <div class="card-icon"><i class="fas fa-flag-checkered"></i></div>
+          <h3>Nuestra Historia</h3>
+          <p style="color: #c8d8d0; line-height: 1.9;">
+            <strong style="color:#ffffff;">EPL STRONG SOUL</strong> es más que un club: es una familia. 
+            Ubicados en Serranías, formamos jugadores con valores, técnica y 
+            espíritu de equipo. Entrenamientos de alto rendimiento, 
+            acompañamiento integral y una comunidad que te impulsa a dar lo mejor.
+          </p>
+          <p style="color: #c8d8d0; line-height: 1.9; margin-top: 10px;">
+            Desde categorías infantiles hasta equipos de competición, nuestro método 
+            combina la tradición del baloncesto con la innovación en cada entrenamiento.
+          </p>
+          <div class="card-tags">
+            <span class="tag"><i class="fas fa-users"></i> 2 Categorías</span>
+            <span class="tag"><i class="fas fa-map-pin"></i> Serranías</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;">
+        <div class="gsap-fade" style="background: var(--bg-card); border: 1px solid var(--border-card); border-radius: var(--radius); padding: 22px 18px; text-align: center;">
+          <i class="fas fa-eye" style="color: #00c06a; font-size: 2rem; margin-bottom: 8px;"></i>
+          <h4 style="font-weight: 700; color:#ffffff; font-size: 1rem;">Visión</h4>
+          <p style="color: #8aaa9a; font-size: 0.85rem;">Ser referente en formación deportiva en la región.</p>
+        </div>
+        <div class="gsap-fade" style="background: var(--bg-card); border: 1px solid var(--border-card); border-radius: var(--radius); padding: 22px 18px; text-align: center;">
+          <i class="fas fa-heart" style="color: #00c06a; font-size: 2rem; margin-bottom: 8px;"></i>
+          <h4 style="font-weight: 700; color:#ffffff; font-size: 1rem;">Valores</h4>
+          <p style="color: #8aaa9a; font-size: 0.85rem;">Respeto, disciplina, trabajo en equipo y pasión.</p>
+        </div>
+        <div class="gsap-fade" style="background: var(--bg-card); border: 1px solid var(--border-card); border-radius: var(--radius); padding: 22px 18px; text-align: center;">
+          <i class="fas fa-bullseye" style="color: #00c06a; font-size: 2rem; margin-bottom: 8px;"></i>
+          <h4 style="font-weight: 700; color:#ffffff; font-size: 1rem;">Misión</h4>
+          <p style="color: #8aaa9a; font-size: 0.85rem;">Formar atletas íntegros dentro y fuera de la cancha.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- UBICACIÓN -->
+    <section class="dashboard-section" id="section-ubicacion">
+      <div class="section-header">
+        <h1><i class="fas fa-map-pin" style="color:#00c06a; font-size:1.6rem;"></i> Ubicación</h1>
+        <p>Encuéntranos en Serranías · Colombia</p>
+      </div>
+      <div class="location-container">
+        <div class="location-info gsap-fade">
+          <h3><i class="fas fa-location-dot" style="color:#00c06a;"></i> Dirección</h3>
+          <div class="address">
+            <p><i class="fas fa-map"></i> Cancha Serranías</p>
+            <p><i class="fas fa-city"></i> Armenia, Quindío</p>
+            <p><i class="fas fa-flag"></i> Cerca de Los Naranjos, Bogotanas Pizza</p>
+          </div>
+          <div class="contact-details">
+            <p><i class="fas fa-phone"></i> +57 300 123 4567</p>
+            <p><i class="fas fa-clock"></i> Lunes - Miércoles - Viernes: 6 PM - 8 PM (Categoría Sub-15)</p>
+            <p><i class="fas fa-clock"></i> Martes - Jueves: 6 PM - 8 PM (Categoría Sub-14)</p>
+            <p><i class="fas fa-clock"></i> Sábados: 10 AM - 12 PM (Sub-14)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REDES -->
+    <section class="dashboard-section" id="section-social">
+      <div class="section-header">
+        <h1><i class="fas fa-share-alt" style="color:#00c06a; font-size:1.6rem;"></i> Redes Oficiales</h1>
+        <p>Síguenos y vive la experiencia EPL</p>
+      </div>
+      <div class="card-grid">
+        <div class="card gsap-fade" style="text-align: center; cursor: pointer;" onclick="window.open('https://www.instagram.com/strong_soul2021?igsh=MWNqZmE2cHhpcjd3eg==','_blank')">
+          <i class="fab fa-instagram" style="font-size: 3.6rem; color: #e4405f; display: block; margin-bottom: 10px;"></i>
+          <h3 style="color:#ffffff;">Instagram</h3>
+          <p style="color:#8aaa9a;">@eplstrongsoul</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERÍA -->
+    <section class="dashboard-section" id="section-galeria">
+      <div class="section-header">
+        <h1><i class="fas fa-images" style="color:#00c06a; font-size:1.6rem;"></i> Galería</h1>
+        <p>Momentos, entrenamientos y partidos · Haz clic para ampliar</p>
+      </div>
+      <div class="gallery-grid-dash" id="galleryGridDash"></div>
+    </section>
+
+    <!-- PRECIOS — UNA SOLA CARTA CON IMAGEN -->
+    <section class="dashboard-section" id="section-precios">
+      <div class="section-header">
+        <h1><i class="fas fa-tag" style="color:#00c06a; font-size:1.6rem;"></i> Planes</h1>
+        <p>Inscripción, uniforme y mensualidad · ¡Elige tu camino!</p>
+      </div>
+      <div class="pricing-single gsap-fade">
+        <img class="pricing-image" src="images/logo.jpg" alt="Planes EPL Strong Soul" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22500%22 height=%22220%22%3E%3Crect fill=%22%231a2e22%22 width=%22500%22 height=%22220%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2230%22 font-family=%22Inter%22 fill=%22%2300c06a%22%3E🏀 PLANES%3C/text%3E%3C/svg%3E'">
+        <div class="pricing-body">
+          <h3>🎯 EPL STRONG SOUL</h3>
+          <p>Si quieres más información, contacta con el entrenador.</p>
+          <button class="btn-contact" onclick="navigateTo('contacto')">📲 CONTACTAR AHORA</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="dashboard-section" id="section-contacto">
+      <div class="section-header">
+        <h1><i class="fab fa-whatsapp" style="color:#00c06a; font-size:1.6rem;"></i> Contacto</h1>
+        <p>Escríbenos directamente por WhatsApp</p>
+      </div>
+      <div class="contact-dash gsap-fade">
+        <div class="form-title">📱 Envíanos un mensaje</div>
+        <div class="form-sub">Completa el formulario y te responderemos en breve</div>
+        <form id="whatsappFormDash">
+          <div class="form-group">
+            <label for="nombreAcudiente"><i class="fas fa-user"></i> Nombre completo del acudiente</label>
+            <input type="text" id="nombreAcudiente" placeholder="Nombre del acudiente" required />
+          </div>
+          <div class="form-group">
+            <label for="nombreDeportista"><i class="fas fa-user"></i> Nombre completo del deportista</label>
+            <input type="text" id="nombreDeportista" placeholder="Nombre del deportista" required />
+          </div>
+          <div class="form-group">
+            <label for="edadDeportista"><i class="fas fa-calendar-alt"></i> Edad del deportista</label>
+            <input type="tel" id="edadDeportista" placeholder="Ej: 10 años" required />
+          </div>
+          <div class="form-group">
+            <label for="telefonoDash"><i class="fas fa-phone"></i> Teléfono de contacto</label>
+            <input type="tel" id="telefonoDash" placeholder="Ej: 3001234567" required />
+          </div>
+          <div class="form-group">
+            <label for="mensajeDash"><i class="fas fa-comment"></i> Mensaje</label>
+            <textarea id="mensajeDash" placeholder="¿Qué plan te interesa? ¿Tienes alguna pregunta?" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">
+            <i class="fab fa-whatsapp"></i> ENVIAR POR WHATSAPP
+          </button>
+        </form>
+        <div class="whatsapp-info">
+          <i class="fas fa-shield-alt"></i> Tus datos serán enviados de forma segura al entrenador
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const isMobile = window.innerWidth <= 768;
+      const splash = document.getElementById('mobileSplash');
+      const splashLogo = document.getElementById('splashLogo');
+      const splashText = document.getElementById('splashText');
+      const splashSub = document.getElementById('splashSub');
+      const mainContent = document.getElementById('mainContent');
+      const navItems = document.querySelectorAll('.nav-item');
+      const sections = document.querySelectorAll('.dashboard-section');
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+
+      // ===== MODAL =====
+      const modalOverlay = document.getElementById('modalOverlay');
+      const modalContent = document.getElementById('modalContent');
+      const modalClose = document.getElementById('modalClose');
+
+      function openModal(element) {
+        const clone = element.cloneNode(true);
+        clone.style.width = 'auto';
+        clone.style.height = 'auto';
+        clone.style.maxWidth = '100%';
+        clone.style.maxHeight = '85vh';
+        clone.style.borderRadius = '0';
+        modalContent.innerHTML = '';
+        modalContent.appendChild(clone);
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        if (clone.tagName === 'VIDEO') {
+          clone.controls = true;
+          clone.autoplay = true;
+          clone.muted = false;
+          clone.play().catch(() => {});
+        }
+      }
+
+      function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          modalContent.innerHTML = '';
+        }, 300);
+      }
+
+      modalClose.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      // ===== ANIMACIONES =====
+      function animateSectionElements(sectionId) {
+        const section = document.getElementById(`section-${sectionId}`);
+        if (!section) return;
+        const els = section.querySelectorAll('.gsap-fade');
+        els.forEach((el, i) => {
+          gsap.fromTo(el,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.5, delay: i * 0.07, ease: "power2.out" }
+          );
+        });
+      }
+
+      function initDashboard() {
+        mainContent.classList.remove('hidden');
+        animateSectionElements('inicio');
+        gsap.from('.brand-logo', { scale: 0, rotation: -180, duration: 0.7, ease: "back.out(1.7)", delay: 0.2 });
+        gsap.from('.sidebar-nav .nav-item', { opacity: 0, x: -10, stagger: 0.04, duration: 0.4, ease: "power2.out", delay: 0.1 });
+      }
+
+      // ===== SPLASH =====
+      if (isMobile) {
+        mainContent.classList.add('hidden');
+        splash.classList.add('active');
+        gsap.to(splashLogo, {
+          rotation: 360,
+          duration: 1,
+          ease: "power2.inOut",
+          onComplete: () => {
+            gsap.to(splashText, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out",
+              onComplete: () => {
+                gsap.to(splashText, { x: -40, opacity: 0, duration: 0.4, ease: "power2.in", delay: 0.5,
+                  onComplete: () => {
+                    gsap.to(splashSub, { x: 0, opacity: 1, duration: 0.5, ease: "power2.out",
+                      onComplete: () => {
+                        setTimeout(() => {
+                          gsap.to(splash, { opacity: 0, duration: 0.35, ease: "power2.in",
+                            onComplete: () => {
+                              splash.classList.remove('active');
+                              splash.style.display = 'none';
+                              initDashboard();
+                            }
+                          });
+                        }, 500);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+        gsap.to(splashLogo, { scale: 1.05, duration: 0.2, ease: "power2.inOut", yoyo: true, repeat: 3, delay: 0.2 });
+      } else {
+        initDashboard();
+      }
+
+      // ===== GALERÍA =====
+      const galleryItems = [
+        { type: 'img', src: 'images/foto1.jpg' },
+        { type: 'img', src: 'images/foto2.jpg' },
+        { type: 'img', src: 'images/foto4.jpg' },
+        { type: 'img', src: 'images/foto5.jpg' },
+        { type: 'img', src: 'images/foto6.jpg' },
+        { type: 'img', src: 'images/foto7.jpg' },
+        { type: 'img', src: 'images/foto8.jpg' },
+        { type: 'video', src: 'images/video1.mp4' },
+        { type: 'video', src: 'images/video2.mp4' },
+        { type: 'video', src: 'images/video3.mp4' }
+      ];
+
+      const galleryGrid = document.getElementById('galleryGridDash');
+
+      galleryItems.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = 'gallery-item gsap-fade';
+
+        if (item.type === 'img') {
+          const img = document.createElement('img');
+          img.src = item.src;
+          img.alt = 'Galería EPL';
+          img.loading = 'lazy';
+          img.onerror = function() {
+            this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%231a2e22%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2240%22 font-family=%22Inter%22 fill=%22%2300c06a%22%3E🏀%3C/text%3E%3C/svg%3E';
+          };
+          div.appendChild(img);
+          div.addEventListener('click', () => openModal(img));
+        } else if (item.type === 'video') {
+          const video = document.createElement('video');
+          video.src = item.src;
+          video.muted = true;
+          video.playsInline = true;
+          video.preload = 'metadata';
+          video.style.width = '100%';
+          video.style.height = '100%';
+          video.style.objectFit = 'cover';
+
+          const badge = document.createElement('div');
+          badge.className = 'play-badge';
+          badge.innerHTML = `<i class="fas fa-play"></i>`;
+
+          div.appendChild(video);
+          div.appendChild(badge);
+
+          div.addEventListener('click', () => {
+            openModal(video);
+          });
+        }
+
+        galleryGrid.appendChild(div);
+      });
+
+      // ===== NAVEGACIÓN =====
+      window.navigateTo = function(sectionId) {
+        navItems.forEach(item => item.classList.remove('active'));
+        sections.forEach(section => section.classList.remove('active'));
+        const targetItem = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
+        if (targetItem) targetItem.classList.add('active');
+        const targetSection = document.getElementById(`section-${sectionId}`);
+        if (targetSection) targetSection.classList.add('active');
+        animateSectionElements(sectionId);
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove('mobile-open');
+          toggleBtn.querySelector('i').className = 'fas fa-bars';
+        }
+      };
+
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const section = item.dataset.section;
+          navigateTo(section);
+        });
+      });
+
+      // ===== TOGGLE =====
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('mobile-open');
+        const icon = toggleBtn.querySelector('i');
+        icon.className = sidebar.classList.contains('mobile-open') ? 'fas fa-times' : 'fas fa-bars';
+      });
+
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+            sidebar.classList.remove('mobile-open');
+            toggleBtn.querySelector('i').className = 'fas fa-bars';
+          }
+        }
+      });
+
+      // ===== FORMULARIO =====
+      const form = document.getElementById('whatsappFormDash');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const nombreAcudiente = document.getElementById('nombreAcudiente').value.trim();
+        const nombreDeportista = document.getElementById('nombreDeportista').value.trim();
+        const edadDeportista = document.getElementById('edadDeportista').value.trim();
+        const telefono = document.getElementById('telefonoDash').value.trim();
+        const mensaje = document.getElementById('mensajeDash').value.trim();
+
+        if (!nombreAcudiente || !nombreDeportista || !edadDeportista || !telefono || !mensaje) {
+          alert('Por favor, completa todos los campos.');
+          return;
+        }
+
+        const numero = '3147602636';
+        const texto = `Hola, soy ${nombreAcudiente} (acudiente). Deportista: ${nombreDeportista}, ${edadDeportista}. Teléfono: ${telefono}. Mensaje: ${mensaje}`;
+        const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+        window.open(url, '_blank');
+        form.reset();
+      });
+
+      console.log('🏀 EPL STRONG SOUL · Mejoras visuales, ortográficas y enlace a Instagram');
+    });
+  </script>
+</body>
+</html>
